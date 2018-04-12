@@ -43,7 +43,7 @@ Public NotInheritable Class MainPage
     Private _bInitialized As Boolean = False
     Private _IsDrawing As Boolean = False
     Private _EncodingProperties As StreamResolution
-    Private _rotationHelper As CameraRotationHelper
+    'Private _rotationHelper As CameraRotationHelper
 
 
     ' Folder in which the captures will be stored (initialized in SetupUiAsync)
@@ -80,14 +80,7 @@ Public NotInheritable Class MainPage
             Debug.WriteLine("The app was denied access to the camera")
         End Try
 
-        ' Initialize rotationHelper
-        _rotationHelper = New CameraRotationHelper(cameraDevice.EnclosureLocation)
-        'AddHandler _rotationHelper.OrientationChanged, AddressOf RotationHelper_OrientationChanged
-
         Await StartPreviewAsync()
-
-
-
 
     End Function
 
@@ -113,8 +106,13 @@ Public NotInheritable Class MainPage
 
         Await _mediaCapture.SetEncodingPropertiesAsync(MediaStreamType.VideoPreview, props, Nothing)
 
-        CboVideoSettings.SelectedIndex = _vpIndex
+        If CboVideoSettings.Items.Count < _vpIndex Then
 
+            SettingButton.Flyout.ShowAt(SettingButton)
+        Else
+
+            CboVideoSettings.SelectedIndex = _vpIndex
+        End If
         'Await _mediaCapture.VideoDeviceController.SetMediaStreamPropertiesAsync(MediaStreamType.VideoPreview, encprop)
 
 
@@ -146,7 +144,8 @@ Public NotInheritable Class MainPage
         ImgOverlay.RenderTransform = t
 
         PreviewControl.RenderTransform = t
-        'dpCanvas.RenderTransform = t
+
+        dpCanvas.RenderTransform = t
 
     End Sub
     Private Async Sub PhotoButton_Click(sender As Object, e As RoutedEventArgs)
@@ -225,20 +224,6 @@ Public NotInheritable Class MainPage
 
 
 
-
-
-    Private Shared Async Function ReencodeAndSavePhotoAsync(stream As IRandomAccessStream, file As StorageFile, photoOrientation As PhotoOrientation) As Task
-        Using inputStream = stream
-            Dim decoder = Await BitmapDecoder.CreateAsync(inputStream)
-            Using outputStream = Await file.OpenAsync(FileAccessMode.ReadWrite)
-                Dim encoder = Await BitmapEncoder.CreateForTranscodingAsync(outputStream, decoder)
-                'Dim properties = New BitmapPropertySet From {{"System.Photo.Orientation", New BitmapTypedValue(photoOrientation, PropertyType.UInt16)}}
-                'Await encoder.BitmapProperties.SetPropertiesAsync(properties)
-                Await encoder.FlushAsync()
-            End Using
-        End Using
-    End Function
-
     Private Sub ClearButton_Click(sender As Object, e As RoutedEventArgs) Handles ClearButton.Click
         ImgOverlay.Source = Nothing
         If DrawingPanel.Children.Count = 1 Then
@@ -265,6 +250,8 @@ Public NotInheritable Class MainPage
 
         _bInitialized = True
         Await InitializeCamera()
+        ChangeSize()
+
     End Sub
 
     Private Sub PopulateVideoSettingComboBox()
@@ -316,7 +303,7 @@ Public NotInheritable Class MainPage
         '
         _tolerance = e.NewValue / 100
         _settings.Values("Tolerance") = _tolerance
-        'TODO: ?? call procedure to snap new photo ??
+
     End Sub
 
 
@@ -344,7 +331,7 @@ Public NotInheritable Class MainPage
 
     Private Sub PreviewControl_PointerPressed(sender As Object, e As PointerRoutedEventArgs) Handles PreviewControl.PointerPressed
         _startPoint = e.GetCurrentPoint(PreviewControl)
-        _boxPoint = e.GetCurrentPoint(Nothing)
+        _boxPoint = e.GetCurrentPoint(dpCanvas)
         _IsDrawing = True
     End Sub
 
@@ -353,7 +340,7 @@ Public NotInheritable Class MainPage
         _IsDrawing = False
     End Sub
     Private Sub PreviewControl_PointerMoved(sender As Object, e As PointerRoutedEventArgs) Handles PreviewControl.PointerMoved
-        DrawCaptureRegion(e.GetCurrentPoint(Nothing).Position)
+        DrawCaptureRegion(e.GetCurrentPoint(dpCanvas).Position)
     End Sub
 
 
@@ -383,15 +370,6 @@ Public NotInheritable Class MainPage
     End Sub
 
     Private Sub MainPage_SizeChanged(sender As Object, e As SizeChangedEventArgs) Handles Me.SizeChanged
-        'Dim ratio As Double = If(_EncodingProperties Is Nothing, 1.78, _EncodingProperties.AspectRatio)
-
-
-        'PreviewControl.Width = e.NewSize.Width
-        'PreviewControl.Height = e.NewSize.Width / ratio
-        'ImgOverlay.Width = e.NewSize.Width
-        'ImgOverlay.Height = e.NewSize.Width / ratio
-        'dpCanvas.Width = e.NewSize.Width
-        'dpCanvas.Height = e.NewSize.Width / ratio
 
         ChangeSize()
 
@@ -418,11 +396,11 @@ Public NotInheritable Class MainPage
 
         PreviewControl.Width = newSize * ratio
         ImgOverlay.Width = newSize * ratio
-            dpCanvas.Width = newSize * ratio
+        dpCanvas.Width = newSize * ratio
 
-            PreviewControl.Height = newSize
-            ImgOverlay.Height = newSize
-            dpCanvas.Height = newSize
+        PreviewControl.Height = newSize
+        ImgOverlay.Height = newSize
+        dpCanvas.Height = newSize
 
 
     End Sub

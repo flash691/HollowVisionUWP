@@ -115,23 +115,23 @@
                     <SymbolIcon Symbol="Camera"/>
                 </Viewbox>
             </Button>
-            <Button Name="SettingButton" IsEnabled="True" Height="50" AutomationProperties.AcceleratorKey="Enter" HorizontalAlignment="Right" Margin="75,0,20,0" BorderBrush="Red" >
+
+        </StackPanel> 
+            <Button Name="SettingButton" IsEnabled="True" Height="60" Width="60" AutomationProperties.AcceleratorKey="Enter" HorizontalAlignment="Right" Margin="75,0,20,0" BorderBrush="Red" Grid.Row="1">
                 <Button.Flyout>
                     <Flyout>
-                        <StackPanel>
-                            <ComboBox x:Name="CboVideoSettings"/>
-                            <CheckBox x:Name="chkFlipX" Content="Flip Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="Red"/>
-                            <CheckBox x:Name="chkFlipY" Content="Flip Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,-1,0,0" Foreground="Red"/>
+                        <StackPanel HorizontalAlignment="Left">
+                            <ComboBox x:Name="CboVideoSettings" PlaceholderText="Camera Not Connected"/>
+                            <CheckBox x:Name="chkFlipX" Content="Flip Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="Red"/>
+                            <CheckBox x:Name="chkFlipY" Content="Flip Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="Red"/>
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
-                <Viewbox MaxHeight="40" MaxWidth="40">
+                <Viewbox MaxHeight="60" MaxWidth="60">
                     <SymbolIcon Symbol="Setting"/>
                 </Viewbox>
                 
             </Button>
-        </StackPanel> 
-
     </Grid>
 
 </Page>
