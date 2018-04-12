@@ -1,0 +1,137 @@
+﻿<Page
+    x:Class="HollowVisionUWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HollowVisionUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ButtonBackground" Color="Transparent"/>
+                    <SolidColorBrush x:Key="ButtonForeground" Color="MediumSlateBlue"/>
+                    <SolidColorBrush x:Key="ButtonBorderBrush" Color="MediumSlateBlue"/>
+                    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="MediumSlateBlue"/> 
+                    
+                    <SolidColorBrush x:Key="SliderSelectionBackground" Color="Red" />
+                    <SolidColorBrush x:Key="SliderSelectionBorder" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBackground" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBackgroundDragging" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBackgroundHover" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBorder" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBorderDisabled" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBorderDragging" Color="Red" />
+                    <SolidColorBrush x:Key="SliderThumbBorderHover" Color="Red" />
+                    <SolidColorBrush x:Key="SliderHeaderForeground" Color="Red" />
+                    <SolidColorBrush x:Key="CheckBoxForegroundUncheckedPointerOver" Color="Blue" />
+                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="Blue" />
+                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="Blue" />
+
+                    <SolidColorBrush x:Key="CheckBoxForegroundUnchecked" Color="Red" />
+                    <SolidColorBrush x:Key="CheckBoxForegroundChecked" Color="Red" />
+                    <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="Red" />
+
+
+                    <SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="Red" />
+
+                    <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundUncheckedPointerOver" Color="Red" />
+
+
+
+
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+        </ResourceDictionary>
+
+    </Page.Resources>
+
+    <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1920*" x:Name="MainGridCol0" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1357*" x:Name="MainGridRow0" />
+            <RowDefinition Height="90"/>
+
+        </Grid.RowDefinitions>
+   
+        <CaptureElement x:Name="PreviewControl" Grid.Row="0"  RenderTransformOrigin="0.5,0.5" Width="1920" Height="1080" Stretch="UniformToFill" />
+        
+        <!--</Viewbox>-->
+        <Image x:Name="ImgOverlay" Grid.Row="0" RenderTransformOrigin="0.5,0.5"  Width="1920" Height="1080">
+            <Image.RenderTransform>
+                <TranslateTransform x:Name="imageTransform" X="0" Y="0" />
+
+            </Image.RenderTransform>
+        </Image>
+
+
+
+
+        <!--<Canvas HorizontalAlignment="Left" VerticalAlignment="Top" />-->
+        <Canvas x:Name="dpCanvas" Grid.Row="0" RenderTransformOrigin="0.5,0.5">
+            <Canvas x:Name="DrawingPanel"  />
+         </Canvas>
+
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" Height="80" Orientation="Horizontal" Grid.Row="1">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="10,40"/>
+                    <Setter Property="MinWidth" Value="60"/>
+                    <Setter Property="MinHeight" Value="60"/>
+                    <!--<Setter Property="Foreground" Value="White"/>-->
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="White"/>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                </Style>
+
+                <Style TargetType="Slider">
+                    <Setter Property="Foreground" Value="Red"/>
+     
+                </Style>
+
+
+            </StackPanel.Resources>
+            <StackPanel.Background>
+                <SolidColorBrush Color="#FFF5EAEA" Opacity="0.2"/>
+            </StackPanel.Background>
+            <Slider x:Name="sdrTolerance" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Width="354" Orientation="Horizontal" Maximum="100" SmallChange="1" TickFrequency="10" Header="Transparancy Tolerance" LargeChange="10" TickPlacement="Outside" />
+            <Slider x:Name="sdrOpacity" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Width="354" Orientation="Horizontal" Maximum="100"  SmallChange="1" TickFrequency="10" Header="Overlay Opacity" LargeChange="10" TickPlacement="Outside" Value="100" />
+
+
+
+            <Button Name="ClearButton"  IsEnabled="True" Height="45"  HorizontalAlignment="Right" Margin="75,0,0,0" BorderBrush="Red" Width="45">
+                <Viewbox MaxHeight="40" MaxWidth="40">
+                    <SymbolIcon Symbol="Cancel"/>
+                </Viewbox>
+            </Button>
+            <Button Name="PhotoButton" Click="PhotoButton_Click" IsEnabled="True" Height="50" AutomationProperties.AcceleratorKey="Enter" HorizontalAlignment="Right" Margin="75,0,0,0" BorderBrush="Red" >
+                <Viewbox MaxHeight="40" MaxWidth="40">
+                    <SymbolIcon Symbol="Camera"/>
+                </Viewbox>
+            </Button>
+            <Button Name="SettingButton" IsEnabled="True" Height="50" AutomationProperties.AcceleratorKey="Enter" HorizontalAlignment="Right" Margin="75,0,20,0" BorderBrush="Red" >
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <ComboBox x:Name="CboVideoSettings"/>
+                            <CheckBox x:Name="chkFlipX" Content="Flip Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="Red"/>
+                            <CheckBox x:Name="chkFlipY" Content="Flip Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,-1,0,0" Foreground="Red"/>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+                <Viewbox MaxHeight="40" MaxWidth="40">
+                    <SymbolIcon Symbol="Setting"/>
+                </Viewbox>
+                
+            </Button>
+        </StackPanel> 
+
+    </Grid>
+
+</Page>
